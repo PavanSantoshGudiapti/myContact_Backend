@@ -74,7 +74,13 @@ const loginUser = asyncHandler(async (req, res) => {
 // @route api/user/current
 // @access private
 const currentUser = asyncHandler(async (req, res) => {
-  res.json(req.user);
+  const {userName} = req.params;
+   if (!userName) {
+    res.status(400);
+    throw new Error("UserName mandatory to get the user details");
+  }
+  const user = await userModel.findOne({ userName });
+  res.json(user);
 });
 
 module.exports = { registerUser, loginUser, currentUser };
